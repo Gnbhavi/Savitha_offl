@@ -1,0 +1,34 @@
+                          PanelOLS Estimation Summary                           
+================================================================================
+Dep. Variable:          TOBIN_Q_RATIO   R-squared:                        0.0579
+Estimator:                   PanelOLS   R-squared (Between):              0.1511
+No. Observations:                 900   R-squared (Within):               0.0579
+Date:                Thu, Aug 03 2023   R-squared (Overall):              0.1339
+Time:                        02:15:17   Log-likelihood                   -1816.9
+Cov. Estimator:            Unadjusted                                           
+                                        F-statistic:                      12.998
+Entities:                          50   P-value                           0.0000
+Avg Obs:                       18.000   Distribution:                   F(4,846)
+Min Obs:                       18.000                                           
+Max Obs:                       18.000   F-statistic (robust):             12.998
+                                        P-value                           0.0000
+Time periods:                      18   Distribution:                   F(4,846)
+Avg Obs:                       50.000                                           
+Min Obs:                       50.000                                           
+Max Obs:                       50.000                                           
+                                                                                
+                                    Parameter Estimates                                     
+============================================================================================
+                          Parameter  Std. Err.     T-stat    P-value    Lower CI    Upper CI
+--------------------------------------------------------------------------------------------
+ENVIRON_DISCLOSURE_SCORE     0.1200     0.0344     3.4919     0.0005      0.0525      0.1875
+SOCIAL_DISCLOSURE_SCORE      0.1053     0.0189     5.5664     0.0000      0.0682      0.1425
+GOVNCE_DISCLOSURE_SCORE      0.0825     0.0178     4.6452     0.0000      0.0477      0.1174
+ESG_DISCLOSURE_SCORE        -0.3150     0.0699    -4.5033     0.0000     -0.4523     -0.1777
+============================================================================================
+
+F-test for Poolability: 36.931
+P-value: 0.0000
+Distribution: F(49,846)
+
+Included effects: Entity
