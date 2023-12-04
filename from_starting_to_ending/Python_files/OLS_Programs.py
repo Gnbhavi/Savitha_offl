@@ -31,41 +31,58 @@ for column_name in econ_df_1.columns:
         df_index = econ_df_1.index.values.tolist()
         inds = [df_index.index(i) for i in index]
         print(inds)
+
+corr = econ_df_1.corr()
+sns.heatmap(corr, xticklabels=corr.columns, yticklabels=corr.columns, cmap="RdBu")
+plt.show()
+
 econ_df = econ_df_1.drop(["Company Name"], axis=1)
 # set the data type and select rows up to 2016
 econ_df = econ_df.astype(float)
+econ_df_after = econ_df.drop(
+    ["ENVIRON_DISCLOSURE_SCORE", "SOCIAL_DISCLOSURE_SCORE", "GOVNCE_DISCLOSURE_SCORE"],
+    axis=1,
+)
 
 
 # the VFI does expect a constant term in the data, so we need to add one using the add_constant method
 X1 = sm.tools.add_constant(econ_df)
+X2 = sm.tools.add_constant(econ_df_after)
 # X2 = sm.tools.add_constant(econ_df_after)
 # create the series for both
 series_before = pd.Series(
     [variance_inflation_factor(X1.values, i) for i in range(X1.shape[1])],
     index=X1.columns,
 )
-# series_after = pd.Series([variance_inflation_factor(X2.values, i) for i in range(X2.shape[1])], index=X2.columns)
+series_after = pd.Series(
+    [variance_inflation_factor(X2.values, i) for i in range(X2.shape[1])],
+    index=X2.columns,
+)
 
 # display the series
 print("DATA BEFORE")
 print("-" * 100)
 print(series_before)
-exit()
 
 
 print("DATA AFTER")
 print("-" * 100)
-display(series_after)
-# calculate the correlation matrix
-corr = econ_df.corr()
-corr = abs(corr)
+print(series_after)
 
-# display the correlation matrix
-corr.to_csv(
-    "~/Python_github/savitha/Savitha_offl/21_NOV_2023/correlation_matrix_absolute.csv"
+
+desc_df = econ_df.describe()
+
+# add the standard deviation metric
+desc_df.loc["+3_std"] = desc_df.loc["mean"] + (desc_df.loc["std"] * 3)
+desc_df.loc["-3_std"] = desc_df.loc["mean"] - (desc_df.loc["std"] * 3)
+
+# display it
+print(desc_df)
+sctter_plotting = ["ALTMAN_Z_SCORE", "TOBIN_Q_RATIO", "RETURN_ON_ASSET"]
+
+plt.scatter(
+    econ_df[sctter_plotting[0]],
+    econ_df["ESG_DISCLOSURE_SCORE"],
 )
-
-# plot the correlation heatmap
-hm = sns.heatmap(corr, xticklabels=corr.columns, yticklabels=corr.columns, cmap="RdBu")
-
 plt.show()
+# calculate the correlation matrix
