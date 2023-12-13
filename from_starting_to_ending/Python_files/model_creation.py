@@ -42,67 +42,83 @@ econ_df_after = econ_df.drop(
 dependent_variables = ["RETURN_ON_ASSET", "TOBIN_Q_RATIO", "ALTMAN_Z_SCORE"]
 
 for values_i in dependent_variables:
-    Y = econ_df_after[values_i]
+    print(values_i)
+    Y = econ_df_after[[values_i]]
     X = econ_df_after.drop(
         ["ALTMAN_Z_SCORE", "RETURN_ON_ASSET", "TOBIN_Q_RATIO"], axis=1
     )
-econ_df_drop_dependent = econ_df_after.drop(
-    ["RETURN_ON_ASSET", "TOBIN_Q_RATIO"], axis=1
-)
+    # Split X and y into X_
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, Y, test_size=0.20, random_state=1
+    )
 
-X = econ_df_drop_dependent.drop(["ALTMAN_Z_SCORE"], axis=1)
-Y = econ_df_drop_dependent[["ALTMAN_Z_SCORE"]]
+    # create a Linear Regression model object
+    regression_model = LinearRegression()
 
+    # pass through the X_train & y_train data set
+    regression_model.fit(X_train, y_train)
 
-# Split X and y into X_
-X_train, X_test, y_train, y_test = train_test_split(
-    X, Y, test_size=0.20, random_state=1
-)
+    # let's grab the coefficient of our model and the intercept
+    intercept = regression_model.intercept_[0]
+    coefficent = regression_model.coef_[0][0]
 
-# create a Linear Regression model object
-regression_model = LinearRegression()
+    print("The intercept for our model is {:.4}".format(intercept))
+    print("-" * 50)
+    # loop through the dictionary and print the data
+    for coef in zip(X.columns, regression_model.coef_[0]):
+        print("The Coefficient for {} is {:.2}".format(coef[0], coef[1]))
 
-# pass through the X_train & y_train data set
-regression_model.fit(X_train, y_train)
+    # define our intput
+    X2 = sm.add_constant(X)
 
+    # create a OLS model
+    model = sm.OLS(Y, X2)
 
-# let's grab the coefficient of our model and the intercept
-intercept = regression_model.intercept_[0]
-coefficent = regression_model.coef_[0][0]
+    # fit the data
+    est = model.fit()
+    # Run the White's test
+    # Heteroscedasticity test (Breusch-Pagan test)
+    _, pval, _, f_pval = sm.stats.diagnostic.het_breuschpagan(est.resid, est.model.exog)
+    print(pval, f_pval)
+    print("-" * 50)
 
-print("The intercept for our model is {:.4}".format(intercept))
-print("-" * 100)
+    # print the results of the test
+    if pval > 0.05:
+        print("For the Breusch-Pagan's Test")
+        print("The p-value was {:.4}".format(pval))
+        print(
+            "We fail to reject the null hypthoesis, so there is no heterosecdasticity."
+        )
 
-# loop through the dictionary and print the data
-for coef in zip(X.columns, regression_model.coef_[0]):
-    print("The Coefficient for {} is {:.2}".format(coef[0], coef[1]))
+    else:
+        print("For the Breusch-Pagan's Test")
+        print("The p-value was {:.4}".format(pval))
+        print("We reject the null hypthoesis, so there is heterosecdasticity.")
 
-# define our intput
-X2 = sm.add_constant(X)
+    # Get fitted values and residuals
+    fitted_values = est.fittedvalues
+    residuals = est.resid
 
-# create a OLS model
-model = sm.OLS(Y, X2)
+    # Plot residuals vs. fitted values
 
-# fit the data
-est = model.fit()
-# Run the White's test
-# Heteroscedasticity test (Breusch-Pagan test)
-_, pval, _, f_pval = sm.stats.diagnostic.het_breuschpagan(est.resid, est.model.exog)
-print(pval, f_pval)
-print("-" * 100)
+    titla_value = "Residuals vs. Fitted Values of " + values_i
+    plt.scatter(fitted_values, residuals)
+    plt.axhline(y=0, color="r", linestyle="--")  # Add a horizontal line at y=0
+    plt.title(titla_value)
+    plt.xlabel("Fitted Values")
+    plt.ylabel("Residuals")
+    plt.show()
+    print("#" * 100)
 
-# print the results of the test
-if pval > 0.05:
-    print("For the Breusch-Pagan's Test")
-    print("The p-value was {:.4}".format(pval))
-    print("We fail to reject the null hypthoesis, so there is no heterosecdasticity.")
-
-else:
-    print("For the Breusch-Pagan's Test")
-    print("The p-value was {:.4}".format(pval))
-    print("We reject the null hypthoesis, so there is heterosecdasticity.")
-
-
+    titla_value = "Residuals vs. log(Fitted Values of " + values_i
+    plt.scatter(np.log(fitted_values), residuals)
+    plt.axhline(y=0, color="r", linestyle="--")  # Add a horizontal line at y=0
+    plt.title(titla_value)
+    plt.xlabel("Fitted Values")
+    plt.ylabel("Residuals")
+    plt.show()
+    print("#" * 100)
+exit()
 model1 = sm.OLS(Y, X2)
 
 # fit the data
