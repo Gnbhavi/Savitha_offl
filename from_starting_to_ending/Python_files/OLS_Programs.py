@@ -63,26 +63,29 @@ series_after = pd.Series(
 print("DATA BEFORE")
 print("-" * 100)
 print(series_before)
-
+series_before.to_csv(os.path.join(file_path, "series_before.csv"))
 
 print("DATA AFTER")
 print("-" * 100)
 print(series_after)
-
+series_after.to_csv(os.path.join(file_path, "series_after.csv"))
 
 desc_df = econ_df.describe()
+desc_df = pd.DataFrame(desc_df)
 
+desc_df.to_csv(os.path.join(file_path, "VIF.csv"))
 # add the standard deviation metric
 desc_df.loc["+3_std"] = desc_df.loc["mean"] + (desc_df.loc["std"] * 3)
 desc_df.loc["-3_std"] = desc_df.loc["mean"] - (desc_df.loc["std"] * 3)
 
+
 # display it
 print(desc_df)
-sctter_plotting = ["ALTMAN_Z_SCORE", "TOBIN_Q_RATIO", "RETURN_ON_ASSET"]
 
-plt.scatter(
-    econ_df[sctter_plotting[0]],
-    econ_df["ESG_DISCLOSURE_SCORE"],
+
+econ_df_after_plot = econ_df_after.drop(
+    ["TOBIN_Q_RATIO", "IND_RISK_DUMMY", "RETURN_ON_ASSET"], axis=1
 )
+
+pd.plotting.scatter_matrix(econ_df_after_plot, alpha=1, figsize=(30, 20))
 plt.show()
-# calculate the correlation matrix
