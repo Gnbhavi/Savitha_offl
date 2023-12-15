@@ -7,6 +7,7 @@ import seaborn as sns
 from scipy import stats
 import matplotlib.pyplot as plt
 
+from scipy.stats import norm
 import statsmodels.api as sm
 
 # from statsmodels.stats.stattools import wald_test
@@ -101,23 +102,46 @@ for values_i in dependent_variables:
 
     # Plot residuals vs. fitted values
 
-    titla_value = "Residuals vs. Fitted Values of " + values_i
-    plt.scatter(fitted_values, residuals)
-    plt.axhline(y=0, color="r", linestyle="--")  # Add a horizontal line at y=0
-    plt.title(titla_value)
-    plt.xlabel("Fitted Values")
-    plt.ylabel("Residuals")
-    plt.show()
-    print("#" * 100)
+    titla_value = "Distribution of Error Term of " + values_i
+    plt.hist(
+        residuals, bins="auto", density=True, alpha=0.7, color="blue", edgecolor="black"
+    )
+    # Fit a normal distribution to the data
+    mu, std = norm.fit(residuals)
 
-    titla_value = "Residuals vs. log(Fitted Values of " + values_i
-    plt.scatter(np.log(fitted_values), residuals)
-    plt.axhline(y=0, color="r", linestyle="--")  # Add a horizontal line at y=0
+    # Plot the PDF of the fitted distribution
+    xmin, xmax = plt.xlim()
+    x = np.linspace(xmin, xmax, 100)
+    p = norm.pdf(x, mu, std)
+    plt.plot(
+        x,
+        p,
+        "k",
+        linewidth=2,
+        label="Fit results: $\mu$ = %.2f, $\sigma$ = %.2f" % (mu, std),
+    )
     plt.title(titla_value)
-    plt.xlabel("Fitted Values")
-    plt.ylabel("Residuals")
+    plt.xlabel("Residuals")
+    plt.ylabel("Frequency")
+    plt.grid(True)
     plt.show()
-    print("#" * 100)
+    # titla_value = "Residuals vs. Fitted Values of " + values_i
+    # plt.scatter(fitted_values, residuals)
+    # plt.axhline(y=0, color="r", linestyle="--")  # Add a horizontal line at y=0
+    # plt.title(titla_value)
+    # plt.xlabel("Fitted Values")
+    # plt.ylabel("Residuals")
+    # plt.show()
+    # print("#" * 100)
+    #
+    # titla_value = "Residuals vs. log(Fitted Values of " + values_i
+    # plt.scatter(np.log(fitted_values), residuals)
+    # plt.axhline(y=0, color="r", linestyle="--")  # Add a horizontal line at y=0
+    # plt.title(titla_value)
+    # plt.xlabel("Fitted Values")
+    # plt.ylabel("Residuals")
+    # plt.show()
+    # print("#" * 100)
 exit()
 model1 = sm.OLS(Y, X2)
 
