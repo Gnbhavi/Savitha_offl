@@ -6,6 +6,8 @@ from scipy.stats import probplot
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from statsmodels.stats.diagnostic import acorr_ljungbox
+from statsmodels.stats.diagnostic import het_breuschpagan
+
 
 file_path = "/Users/gnbhavithran/Python_github/savitha/Savitha_offl/from_starting_to_ending/new_files/"
 econ_df_1 = pd.read_csv(os.path.join(file_path, "timeLag_2003.csv"), index_col=0)
@@ -50,17 +52,27 @@ for ind_variables in independent_variables:
 
         # Display regression results
         print(results.summary())
-
-        resuls = results.summary()
-
+        name = (
+            values_i + " and " + ind_variables.replace("_DISCLOSURE_SCORE", "") + ".txt"
+        )
+        # Save the model summary to a text file
+        with open(os.path.join(file_path, name), "w") as file:
+            file.write(str(results.summary))
         # Assuming 'results' is your GLS regression results
         residuals = results.resid
-
+        # Assuming 'results' is your GLS regression results
+        # probplot(residuals, plot=plt)
+        # plt.title("Q-Q Plot of Residuals")
+        # plt.show()
+        bp_test = het_breuschpagan(results.resid, results.model.exog)
+        print("Breusch-Pagan test p-value:", bp_test[1])
         # Assuming 'results' is your GLS regression results
         # lb_test = acorr_ljungbox(results.resid)
         # print("Ljung-Box test p-values:", lb_test[1])
         # sns.histplot(residuals, kde=True)
         # plt.title("Histogram of Residuals")
         # plt.show()
+        print("R-squared:", results.rsquared)
+        print("Adjusted R-squared:", results.rsquared_adj)
         print("-" * 50)
     print("*" * 75)

@@ -1,0 +1,1 @@
+<bound method RegressionResults.summary of <statsmodels.regression.linear_model.RegressionResults object at 0x124d7ed10>>
