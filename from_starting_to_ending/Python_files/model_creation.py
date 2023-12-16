@@ -9,6 +9,8 @@ import matplotlib.pyplot as plt
 
 from scipy.stats import norm
 import statsmodels.api as sm
+from statsmodels.stats.stattools import durbin_watson
+from statsmodels.stats.diagnostic import acorr_breusch_godfrey
 
 # from statsmodels.stats.stattools import wald_test
 from sklearn.linear_model import LinearRegression
@@ -41,7 +43,8 @@ econ_df_after = econ_df.drop(
 )
 
 dependent_variables = ["RETURN_ON_ASSET", "TOBIN_Q_RATIO", "ALTMAN_Z_SCORE"]
-
+residuals_1 = pd.Series([])
+exog_1 = np.empty((1, 9))
 for values_i in dependent_variables:
     print(values_i)
     Y = econ_df_after[[values_i]]
@@ -80,6 +83,11 @@ for values_i in dependent_variables:
     # Run the White's test
     # Heteroscedasticity test (Breusch-Pagan test)
     _, pval, _, f_pval = sm.stats.diagnostic.het_breuschpagan(est.resid, est.model.exog)
+    print(est.model.exog.shape)
+    if exog_1.size == 0:
+        exog_1 = est.model.exog
+    else:
+        exog_1 = np.concatenate((exog_1, est.model.exog), axis=0)
     print(pval, f_pval)
     print("-" * 50)
 
@@ -99,57 +107,77 @@ for values_i in dependent_variables:
     # Get fitted values and residuals
     fitted_values = est.fittedvalues
     residuals = est.resid
+    residuals_1 = residuals_1.append(residuals, ignore_index=True)
 
-    # Plot residuals vs. fitted values
-
-    titla_value = "Distribution of Error Term of " + values_i
-    plt.hist(
-        residuals, bins="auto", density=True, alpha=0.7, color="blue", edgecolor="black"
-    )
-    # Fit a normal distribution to the data
-    mu, std = norm.fit(residuals)
-
-    # Plot the PDF of the fitted distribution
-    xmin, xmax = plt.xlim()
-    x = np.linspace(xmin, xmax, 100)
-    p = norm.pdf(x, mu, std)
-    plt.plot(
-        x,
-        p,
-        "k",
-        linewidth=2,
-        label="Fit results: $\mu$ = %.2f, $\sigma$ = %.2f" % (mu, std),
-    )
-    plt.title(titla_value)
-    plt.xlabel("Residuals")
-    plt.ylabel("Frequency")
-    plt.grid(True)
-    plt.show()
-    # titla_value = "Residuals vs. Fitted Values of " + values_i
+    # Assuming 'model' is your fitted regression model
+    bg_test_stat, bg_p_value, _, _ = acorr_breusch_godfrey(est)
+    print("Breusch_godfrey p-value: ", bg_p_value)
+    # Check for autocorrelation
+    if bg_p_value < 0.05:
+        print("Significant autocorrelation detected.")
+    else:
+        print("No significant autocorrelation detected.")
+    # plt.rcParams["figure.figsize"] = (18, 10)
+    # titla_value = "Distribution of Error Term"
+    # plt.hist(
+    #     residuals, bins="auto", density=True, alpha=0.7, color="blue", edgecolor="black"
+    # )
+    # # Fit a normal distribution to the data
+    # mu, std = norm.fit(residuals_1)
+    #
+    # # Plot the PDF of the fitted distribution
+    # xmin, xmax = plt.xlim()
+    # x = np.linspace(xmin, xmax, 100)
+    # p = np.exp(-((x - mu) ** 2) / (2 * std**2)) / (std * np.sqrt(2 * np.pi))
+    # plt.plot(
+    #     x,
+    #     p,
+    #     "k",
+    #     linewidth=2,
+    #     label="Fit results: $\mu$ = %.2f, $\sigma$ = %.2f" % (mu, std),
+    # )
+    # plt.title(titla_value)
+    # plt.xlabel("Residuals")
+    # plt.ylabel("Frequency")
+    # plt.grid(True)
+    # plt.show()
+    # titla_value = "residuals vs. Fitted Values of " + values_i
     # plt.scatter(fitted_values, residuals)
     # plt.axhline(y=0, color="r", linestyle="--")  # Add a horizontal line at y=0
     # plt.title(titla_value)
     # plt.xlabel("Fitted Values")
-    # plt.ylabel("Residuals")
+    # plt.ylabel("residuals")
     # plt.show()
     # print("#" * 100)
     #
-    # titla_value = "Residuals vs. log(Fitted Values of " + values_i
+    # titla_value = "residuals vs. log(Fitted Values of " + values_i
     # plt.scatter(np.log(fitted_values), residuals)
     # plt.axhline(y=0, color="r", linestyle="--")  # Add a horizontal line at y=0
     # plt.title(titla_value)
     # plt.xlabel("Fitted Values")
-    # plt.ylabel("Residuals")
+    # plt.ylabel("residuals")
     # plt.show()
     # print("#" * 100)
+_, pval, _, f_pval = sm.stats.diagnostic.het_breuschpagan(residuals_1, exog_1)
+
+if pval > 0.05:
+    print("For the Breusch-Pagan's Test")
+    print("The p-value was {:.4}".format(pval))
+    print("We fail to reject the null hypthoesis, so there is no heterosecdasticity.")
+
+else:
+    print("For the Breusch-Pagan's Test")
+    print("The p-value was {:.4}".format(pval))
+    print("We reject the null hypthoesis, so there is heterosecdasticity.")
 exit()
+
 model1 = sm.OLS(Y, X2)
 
 # fit the data
 est = model.fit()
 # Run the White's test
 # Heteroscedasticity test (Breusch-Pagan test)
-_, pval, _, f_pval = sm.stats.diagnostic.het_breuschpagan(est.resid, est.model.exog)
+_, pval, _, f_pval = sm.stats.diagnostic.het_breuschpagan(est.d, est.model.exog)
 print(pval, f_pval)
 print("-" * 100)
 
@@ -171,9 +199,9 @@ residuals = est.resid
 # Plot residuals vs. fitted values
 plt.scatter(fitted_values, residuals)
 plt.axhline(y=0, color="r", linestyle="--")  # Add a horizontal line at y=0
-plt.title("Residuals vs. Fitted Values")
+plt.title("residuals vs. Fitted Values")
 plt.xlabel("Fitted Values")
-plt.ylabel("Residuals")
+plt.ylabel("residuals")
 plt.show()
 exit()
 # print(pval, f_pval)
@@ -193,7 +221,7 @@ exit()
 #     print("We reject the null hypthoesis, so there is heterosecdasticity. \n")
 #
 # # Run the Breusch-Pagan test
-# _, pval, __, f_pval = diag.het_breuschpagan(est.resid, est.model.exog)
+# _, pval, __, f_pval = diag.het_breuschpagan(est.d, est.model.exog)
 # print(pval, f_pval)
 # print("-" * 100)
 #
