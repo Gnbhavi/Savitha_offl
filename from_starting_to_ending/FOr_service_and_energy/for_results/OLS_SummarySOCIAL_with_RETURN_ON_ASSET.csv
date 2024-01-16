@@ -1,0 +1,23 @@
+                      OLS Regression Results                     
+Dep. Variable:   ,RETURN_ON_ASSET ,  R-squared:         ,   0.278
+Model:           ,OLS             ,  Adj. R-squared:    ,   0.258
+Method:          ,Least Squares   ,  F-statistic:       ,   14.31
+Date:            ,Tue, 16 Jan 2024,  Prob (F-statistic):,6.54e-10
+Time:            ,13:20:11        ,  Log-Likelihood:    , -548.59
+No. Observations:,   154          ,  AIC:               ,   1107.
+Df Residuals:    ,   149          ,  BIC:               ,   1122.
+Df Model:        ,     4          ,                     ,        
+Covariance Type: ,nonrobust       ,                     ,        
+                       ,   coef   , std err ,    t    ,P>|t| ,  [0.025 ,  0.975] 
+const                  ,   17.1520,    5.710,    3.004, 0.003,    5.870,   28.434
+SOCIAL_DISCLOSURE_SCORE,   -0.0342,    0.241,   -0.142, 0.887,   -0.511,    0.443
+FNCL_LVRG              ,   -0.6035,    0.127,   -4.751, 0.000,   -0.854,   -0.353
+Firm size              ,   -0.9394,    0.579,   -1.624, 0.107,   -2.083,    0.204
+Liquidity              ,    1.4507,    0.509,    2.853, 0.005,    0.446,    2.456
+Omnibus:      ,195.314,  Durbin-Watson:     ,   1.628 
+Prob(Omnibus):, 0.000 ,  Jarque-Bera (JB):  ,11127.952
+Skew:         , 4.794 ,  Prob(JB):          ,    0.00 
+Kurtosis:     ,43.525 ,  Cond. No.          ,    137. 
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.

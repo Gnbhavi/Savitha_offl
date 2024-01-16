@@ -1,0 +1,23 @@
+                      OLS Regression Results                     
+Dep. Variable:   ,PX_TO_BOOK_RATIO,  R-squared:         ,   0.114
+Model:           ,OLS             ,  Adj. R-squared:    ,   0.090
+Method:          ,Least Squares   ,  F-statistic:       ,   4.795
+Date:            ,Tue, 16 Jan 2024,  Prob (F-statistic):,0.00115 
+Time:            ,13:20:11        ,  Log-Likelihood:    , -884.34
+No. Observations:,   154          ,  AIC:               ,   1779.
+Df Residuals:    ,   149          ,  BIC:               ,   1794.
+Df Model:        ,     4          ,                     ,        
+Covariance Type: ,nonrobust       ,                     ,        
+                       ,   coef   , std err ,    t    ,P>|t| ,  [0.025 ,  0.975] 
+const                  ,  -64.3299,   62.354,   -1.032, 0.304, -187.543,   58.883
+GOVNCE_DISCLOSURE_SCORE,   -0.4755,    0.677,   -0.702, 0.484,   -1.814,    0.863
+FNCL_LVRG              ,    3.7716,    1.115,    3.381, 0.001,    1.568,    5.976
+Firm size              ,    8.8590,    4.728,    1.874, 0.063,   -0.483,   18.201
+Liquidity              ,    2.4370,    4.546,    0.536, 0.593,   -6.547,   11.421
+Omnibus:      ,202.246,  Durbin-Watson:     ,   0.719
+Prob(Omnibus):, 0.000 ,  Jarque-Bera (JB):  ,8069.736
+Skew:         , 5.329 ,  Prob(JB):          ,    0.00
+Kurtosis:     ,36.824 ,  Cond. No.          ,    789.
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
