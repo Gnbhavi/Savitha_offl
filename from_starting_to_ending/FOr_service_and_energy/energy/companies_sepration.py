@@ -1,4 +1,4 @@
-# Service Companies
+# Energy Companies
 
 import os
 from matplotlib import use
@@ -17,35 +17,32 @@ df = pd.read_csv(
     index_col=0,
 )
 
-
 # Convert the 'Birthdate' column to datetime
 df["Dates"] = pd.to_datetime(df["Dates"])
 
 # Extract the year and create a new 'Year' column
 df["Year"] = df["Dates"].dt.year
-service_companies_list = [
-    "INDIGO",
-    "SJET",
-    "CCRI",
-    "BDE",
-    "AGLL",
-    "TRPC",
-    "VRLL",
-    "GRFL",
-    "RIIL",
-    "GESCO",
-    "SCI",
-    "GMRI",
-    "ADSEZ",
-    "GPPV",
-    "BFUT",
-    "REDI",
-    "MMTC",
-    "SECIS",
-    "NSE",
-    "FSOL",
-    "ECLX",
-    "HGSL",
+Energy_companies_list = [
+    "GAIL",
+    "GUJGA",
+    "GUJS",
+    "ATGL",
+    "IGL",
+    "PLNG",
+    "MAHGL",
+    "AGIS",
+    "ONGC",
+    "OINL",
+    "HOE",
+    "RELIANCE",
+    "IOCL",
+    "BPCL",
+    "HPCL",
+    "MRPL",
+    "CSTRL",
+    "AMRJ",
+    "COAL",
+    "MRL",
 ]
 
 
@@ -56,25 +53,27 @@ change_column = [
     "GOVNCE_DISCLOSURE_SCORE",
 ]
 filling_column = [
-    "FNCL_LVRG",
     "RETURN_ON_ASSET",
+    "RETURN_COM_EQY",
     "BS_TOT_ASSET",
+    "FNCL_LVRG",
     "PX_TO_BOOK_RATIO",
 ]
 # "Liquidity",
 useful_column = ["Year", "Company Name"] + change_column + filling_column
-print(useful_column)
 # df_1 = df[df["Year"] > 2007]
-df = df[df["Company Name"].isin(service_companies_list)]
+df = df[df["Company Name"].isin(Energy_companies_list)]
 df_copy = df.copy()
 df_copy = pd.DataFrame(df_copy)
-for companies in service_companies_list:
+no_entry_company = []
+for companies in Energy_companies_list:
     for variables in filling_column:
         df_copy_company = df[df["Company Name"] == companies]
         variable_col = df_copy_company[variables]
         variable_col_1 = variable_col.dropna()
         if len(variable_col_1) == 0:
             print("Company name: ", companies, "column: ", variables)
+            no_entry_company.append(companies)
             continue
         if len(variable_col_1) == len(variable_col):
             continue
@@ -126,5 +125,5 @@ for companies in service_companies_list:
 df_copy = df_copy[useful_column]
 df_copy["SOCIAL_DISCLOSURE_SCORE"] = np.round(df["SOCIAL_DISCLOSURE_SCORE"], 4)
 df_copy["Firm size"] = np.log(np.abs(df_copy["BS_TOT_ASSET"]))
-main_file_path = "/Users/gnbhavithran/Python_github/savitha/Savitha_offl/from_starting_to_ending/FOr_service_and_energy/"
+main_file_path = "/Users/gnbhavithran/Python_github/savitha/Savitha_offl/from_starting_to_ending/FOr_service_and_energy/energy/"
 df_copy.to_csv(os.path.join(main_file_path, "dependent_and_control_filled.csv"))

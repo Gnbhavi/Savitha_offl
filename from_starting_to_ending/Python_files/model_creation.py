@@ -107,7 +107,7 @@ for values_i in dependent_variables:
     # Get fitted values and residuals
     fitted_values = est.fittedvalues
     residuals = est.resid
-    residuals_1 = residuals_1.append(residuals, ignore_index=True)
+    # residuals_1 = residuals_1.append(residuals, ignore_index=True)
 
     # Assuming 'model' is your fitted regression model
     bg_test_stat, bg_p_value, _, _ = acorr_breusch_godfrey(est)
@@ -117,6 +117,7 @@ for values_i in dependent_variables:
         print("Significant autocorrelation detected.")
     else:
         print("No significant autocorrelation detected.")
+
     # plt.rcParams["figure.figsize"] = (18, 10)
     # titla_value = "Distribution of Error Term"
     # plt.hist(
@@ -158,17 +159,19 @@ for values_i in dependent_variables:
     # plt.ylabel("residuals")
     # plt.show()
     # print("#" * 100)
-_, pval, _, f_pval = sm.stats.diagnostic.het_breuschpagan(residuals_1, exog_1)
-
-if pval > 0.05:
-    print("For the Breusch-Pagan's Test")
-    print("The p-value was {:.4}".format(pval))
-    print("We fail to reject the null hypthoesis, so there is no heterosecdasticity.")
-
-else:
-    print("For the Breusch-Pagan's Test")
-    print("The p-value was {:.4}".format(pval))
-    print("We reject the null hypthoesis, so there is heterosecdasticity.")
+    # _, pval, _, f_pval = sm.stats.diagnostic.het_breuschpagan(residuals, exog_1)
+    #
+    # if pval > 0.05:
+    #     print("For the Breusch-Pagan's Test")
+    #     print("The p-value was {:.4}".format(pval))
+    #     print(
+    #         "We fail to reject the null hypthoesis, so there is no heterosecdasticity."
+    #     )
+    #
+    # else:
+    #     print("For the Breusch-Pagan's Test")
+    #     print("The p-value was {:.4}".format(pval))
+    #     print("We reject the null hypthoesis, so there is heterosecdasticity.")
 exit()
 
 model1 = sm.OLS(Y, X2)
