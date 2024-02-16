@@ -7,13 +7,9 @@ import statsmodels.api as sm
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
-file_path = (
-    "/Users/gnbhavithran/Python_github/savitha/Savitha_offl/from_starting_to_ending/"
-)
+file_path = "/Users/gnbhavithran/Python_github/savitha/Savitha_offl/from_starting_to_ending/FOr_service_and_energy/energy/"
 df = pd.read_csv(
-    os.path.join(
-        file_path, "FOr_service_and_energy/energy/dependent_and_control_filled.csv"
-    ),
+    os.path.join(file_path, "Liquidity_added.csv"),
     index_col=0,
 )
 
@@ -40,13 +36,13 @@ corr_val = pd.DataFrame(corr_val)
 corr_val.to_csv(
     os.path.join(
         file_path,
-        "FOr_service_and_energy/energy/correlation_laast15years_positive_changes.csv",
+        "correlation_laast15years_positive_changes.csv",
     )
 )
 
 df_1.describe().round(4).to_csv(
     os.path.join(
         file_path,
-        "FOr_service_and_energy/energy/describe_last15years_positive_changes.csv",
+        "describe_last15years_positive_changes.csv",
     )
 )
