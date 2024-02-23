@@ -160,4 +160,28 @@ for values_i in dependent_variables:
     plt.ylabel("Frequency")
     plt.grid(True)
     plt.show()
+    # plt.rcParams["figure.figsize"] = (19, 10)
     # plt.rcParams["figure.figsize"] = (18, 10)
+    # titla_value = "Distribution of Error Term"
+    # plt.hist(
+    #     residuals, bins="auto", density=True, alpha=0.7, color="blue", edgecolor="black"
+    # )
+    # # Fit a normal distribution to the data
+    # mu, std = norm.fit(residuals_1)
+    #
+    # # Plot the PDF of the fitted distribution
+    # xmin, xmax = plt.xlim()
+    # x = np.linspace(xmin, xmax, 100)
+    # p = np.exp(-((x - mu) ** 2) / (2 * std**2)) / (std * np.sqrt(2 * np.pi))
+    # plt.plot(
+    #     x,
+    #     p,
+    #     "k",
+    #     linewidth=2,
+    #     label="Fit results: $\mu$ = %.2f, $\sigma$ = %.2f" % (mu, std),
+    # )
+    # plt.title(titla_value)
+    # plt.xlabel("Residuals")
+    # plt.ylabel("Frequency")
+    # plt.grid(True)
+    # plt.show()
