@@ -40,9 +40,22 @@ for values_i in dependent_variables:
     print(values_i)
     Y = econ_df_after[[values_i]]
     X = econ_df_after.drop(["RETURN_ON_ASSET", "RETURN_COM_EQY"], axis=1)
-    data = {"x": X, "y": Y}
-    df = pd.DataFrame(data)
+    df = X.copy()
+
+    # Add constant term to the independent variable
+    X = sm.add_constant(X)
 
     # Fit robust GLS model
-    # model = smf.gls(formula="y ~ x", data=df)
-    # results = model.fit(cov_type="robust")
+    model = sm.GLS(Y, X)
+    results = model.fit(cov_type="HC3")
+    # print(results.summary())
+
+    name = values_i + "_GLS.txt"
+
+    # Save the model summary to a text file
+    with open(os.path.join(file_path, "GLS_results", name), "w") as file:
+        file.write(str(results.summary()))
+    #     #
+    #     # Fit robust GLS model
+#     # results = model.fit(cov_type="robust")
+print("Done")

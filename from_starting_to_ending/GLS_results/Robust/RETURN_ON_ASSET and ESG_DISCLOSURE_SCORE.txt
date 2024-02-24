@@ -1,0 +1,34 @@
+                            GLS Regression Results                            
+==============================================================================
+Dep. Variable:        RETURN_ON_ASSET   R-squared:                       0.050
+Model:                            GLS   Adj. R-squared:                  0.049
+Method:                 Least Squares   F-statistic:                     37.74
+Date:                Sat, 24 Feb 2024   Prob (F-statistic):           2.31e-59
+Time:                        12:37:56   Log-Likelihood:                -32092.
+No. Observations:                7984   AIC:                         6.420e+04
+Df Residuals:                    7975   BIC:                         6.426e+04
+Df Model:                           8                                         
+Covariance Type:                  HC3                                         
+========================================================================================
+                           coef    std err          z      P>|z|      [0.025      0.975]
+----------------------------------------------------------------------------------------
+const                    9.4361      0.643     14.685      0.000       8.177      10.695
+ESG_DISCLOSURE_SCORE     0.0262      0.017      1.565      0.118      -0.007       0.059
+FNCL_LVRG               -0.0381      0.010     -3.962      0.000      -0.057      -0.019
+BOOK_VAL_PER_SH      -2.685e-08   1.35e-07     -0.199      0.842   -2.91e-07    2.37e-07
+PX_TO_BOOK_RATIO        -0.0493      0.012     -3.983      0.000      -0.074      -0.025
+NET_WORTH_GROWTH        -0.0140      0.011     -1.284      0.199      -0.035       0.007
+TOT_DEBT_TO_COM_EQY     -0.0003   3.83e-05     -7.467      0.000      -0.000      -0.000
+Liquidity               -0.0417      0.105     -0.396      0.692      -0.248       0.165
+IND_RISK_DUMMY          -3.6697      0.312    -11.748      0.000      -4.282      -3.057
+==============================================================================
+Omnibus:                    10525.355   Durbin-Watson:                   0.573
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):          5565015.307
+Skew:                          -7.035   Prob(JB):                         0.00
+Kurtosis:                     131.571   Cond. No.                     6.47e+06
+==============================================================================
+
+Notes:
+[1] Standard Errors are heteroscedasticity robust (HC3)
+[2] The condition number is large, 6.47e+06. This might indicate that there are
+strong multicollinearity or other numerical problems.
