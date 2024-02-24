@@ -1,3 +1,4 @@
+from operator import le
 import os
 from matplotlib import axis
 import numpy as np
@@ -6,6 +7,7 @@ from pyparsing import col
 import seaborn as sns
 from scipy import stats
 import matplotlib.pyplot as plt
+
 
 from scipy.stats import norm
 import statsmodels.api as sm
@@ -16,8 +18,7 @@ from statsmodels.stats.diagnostic import acorr_breusch_godfrey
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
-from statsmodels.stats.diagnostic import het_breuschpagan, het_white
-
+from statsmodels.stats.diagnostic import het_breuschpagan, het_white, het_goldfeldquandt
 
 file_path = "/Users/gnbhavithran/Python_github/savitha/Savitha_offl/from_starting_to_ending/FOr_service_and_energy/energy/"
 
@@ -49,7 +50,7 @@ econ_df_after = econ_df.drop(
 )
 
 dependent_variables = ["RETURN_ON_ASSET", "RETURN_COM_EQY"]
-residuals_1 = pd.Series([])
+# residuals_1 = pd.Series([])
 exog_1 = np.empty((1, 7))
 for values_i in dependent_variables:
     print(values_i)
@@ -80,49 +81,39 @@ for values_i in dependent_variables:
     X2 = sm.add_constant(X)
 
     # create a OLS model
-    model = sm.OLS(Y, X2)
+    model = sm.OLS(Y, X2).fit()
 
     # fit the data
-    est = model.fit()
+    # est = model.fit()
     # Run the White's test
-    print(est.model.exog)
+    # print(est.model.exog)
     #
     # # Perform the White test
-    # white_test = het_white(est.resid, est.model.exog)
-    # Assert the condition
-    assert model.df_model == np.linalg.matrix_rank(est.model.exog) - 1
-    # print("White test statistic:", white_test[0])
-    # print("p-value:", white_test[1])
-    # print("LM test statistic:", white_test[2])
-    # print("LM test p-value:", white_test[3])
-    # # Heteroscedasticity test (Breusch-Pagan test)
-    # # _, pval, _, f_pval = sm.stats.diagnostic.het_breuschpagan(est.resid, est.model.exog)
-    # # print(est.model.exog.shape)
-    # # if exog_1.size == 0:
-    # #     exog_1 = est.model.exog
-    # # else:
-    # #     exog_1 = np.concatenate((exog_1, est.model.exog), axis=0)
-    # # print(pval, f_pval)
-    # # print("-" * 50)
-    # #
-    # # # print the results of the test
-    # # if pval > 0.05:
-    # #     print("For the Breusch-Pagan's Test")
-    # #     print("The p-value was {:.4}".format(pval))
-    # #     print(
-    # #         "We fail to reject the null hypthoesis, so there is no heterosecdasticity."
-    # #     )
-    # #
-    # # else:
-    # #     print("For the Breusch-Pagan's Test")
-    # #     print("The p-value was {:.4}".format(pval))
-    # #     print("We reject the null hypthoesis, so there is heterosecdasticity.")
-    # #
-    # # # Get fitted values and residuals
-    # # fitted_values = est.fittedvalues
-    # # residuals = est.resid
-    # #
-    # # # # Create plot
+    # Get the residuals
+    # Get the exogenous variables for the White test
+    residuals = model.resid
+    # Perform Goldfeld-Quandt test
+    gq_test_statistic, gq_p_value, split_point = het_goldfeldquandt(model.resid, X)
+    print(f"Goldfeld-Quandt Test Statistic: {gq_test_statistic}")
+    print(f"P-value: {gq_p_value}")
+
+    if gq_p_value >= 0.05:
+        print("For the Goldfeld-Quandt Test")
+        print("The p-value was {:.4}".format(gq_p_value))
+        print(
+            "We fail to reject the null hypthoesis, so there is no heterosecdasticity."
+        )
+        print("We accept null hypothesis, so there is homocedacity")
+
+    else:
+        print("For the Goldfeld-Quandt Test")
+        print("The p-value was {:.4}".format(gq_p_value))
+        print("We reject the null hypthoesis, so there is heterosecdasticity.")
+    # Perform the Arellano-Bond test
+
+    # Perform the Pesaran CD test
+    pesaran_cd_test = cd(cd.Pesaran, model, w, test_type="cd")
+    print(pesaran_cd_test.summary)
     # # # plt.figure(figsize=(8, 6))
     # # # plt.scatter(fitted_values, residuals, alpha=0.8)
     # # # plt.xlabel("Fitted values")
