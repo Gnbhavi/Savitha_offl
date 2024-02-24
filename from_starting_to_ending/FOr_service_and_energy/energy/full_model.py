@@ -85,103 +85,113 @@ for values_i in dependent_variables:
     # fit the data
     est = model.fit()
     # Run the White's test
-    # Heteroscedasticity test (Breusch-Pagan test)
-    _, pval, _, f_pval = sm.stats.diagnostic.het_breuschpagan(est.resid, est.model.exog)
-    print(est.model.exog.shape)
-    if exog_1.size == 0:
-        exog_1 = est.model.exog
-    else:
-        exog_1 = np.concatenate((exog_1, est.model.exog), axis=0)
-    print(pval, f_pval)
-    print("-" * 50)
-
-    # print the results of the test
-    if pval > 0.05:
-        print("For the Breusch-Pagan's Test")
-        print("The p-value was {:.4}".format(pval))
-        print(
-            "We fail to reject the null hypthoesis, so there is no heterosecdasticity."
-        )
-
-    else:
-        print("For the Breusch-Pagan's Test")
-        print("The p-value was {:.4}".format(pval))
-        print("We reject the null hypthoesis, so there is heterosecdasticity.")
-
-    # Get fitted values and residuals
-    fitted_values = est.fittedvalues
-    residuals = est.resid
-
-    # Create plot
-    plt.figure(figsize=(8, 6))
-    plt.scatter(fitted_values, residuals, alpha=0.8)
-    plt.xlabel("Fitted values")
-    plt.ylabel("Residuals")
-    if values_i == "RETURN_ON_ASSET":
-        plt.title("Residuals vs Fitted Values of Return on Asset")
-    else:
-        plt.title("Residuals vs Fitted Values of Return on Common Equity")
-    plt.axhline(y=0, color="k", linestyle="--")  # Add horizontal line at y=0
-    # Set limits for x-axis and y-axis
-    plt.ylim(bottom=-30, top=30)  # Example limits for the y-axis
-    plt.show()
-    # residuals_1 = residuals_1.append(residuals, ignore_index=True)
-
-    # Assuming 'model' is your fitted regression model
-    bg_test_stat, bg_p_value, _, _ = acorr_breusch_godfrey(est)
-    print("Breusch_godfrey p-value: ", bg_p_value)
-    # Check for autocorrelation
-    if bg_p_value < 0.05:
-        print("Significant autocorrelation detected.")
-    else:
-        print("No significant autocorrelation detected.")
-
-    plt.rcParams["figure.figsize"] = (18, 10)
-    titla_value = "Distribution of Error Term"
-    plt.hist(
-        residuals, bins="auto", density=True, alpha=0.7, color="blue", edgecolor="black"
-    )
-    # Fit a normal distribution to the data
-    mu, std = norm.fit(residuals)
-
-    # Plot the PDF of the fitted distribution
-    xmin, xmax = plt.xlim()
-    x = np.linspace(xmin, xmax, 100)
-    p = np.exp(-((x - mu) ** 2) / (2 * std**2)) / (std * np.sqrt(2 * np.pi))
-    plt.plot(
-        x,
-        p,
-        "k",
-        linewidth=2,
-        label="Fit results: $\mu$ = %.2f, $\sigma$ = %.2f" % (mu, std),
-    )
-    plt.title(titla_value)
-    plt.xlabel("Residuals")
-    plt.ylabel("Frequency")
-    plt.grid(True)
-    plt.show()
-    # plt.rcParams["figure.figsize"] = (19, 10)
-    # plt.rcParams["figure.figsize"] = (18, 10)
-    # titla_value = "Distribution of Error Term"
-    # plt.hist(
-    #     residuals, bins="auto", density=True, alpha=0.7, color="blue", edgecolor="black"
-    # )
-    # # Fit a normal distribution to the data
-    # mu, std = norm.fit(residuals_1)
+    print(est.model.exog)
     #
-    # # Plot the PDF of the fitted distribution
-    # xmin, xmax = plt.xlim()
-    # x = np.linspace(xmin, xmax, 100)
-    # p = np.exp(-((x - mu) ** 2) / (2 * std**2)) / (std * np.sqrt(2 * np.pi))
-    # plt.plot(
-    #     x,
-    #     p,
-    #     "k",
-    #     linewidth=2,
-    #     label="Fit results: $\mu$ = %.2f, $\sigma$ = %.2f" % (mu, std),
-    # )
-    # plt.title(titla_value)
-    # plt.xlabel("Residuals")
-    # plt.ylabel("Frequency")
-    # plt.grid(True)
-    # plt.show()
+    # # Perform the White test
+    # white_test = het_white(est.resid, est.model.exog)
+    # Assert the condition
+    assert model.df_model == np.linalg.matrix_rank(est.model.exog) - 1
+    # print("White test statistic:", white_test[0])
+    # print("p-value:", white_test[1])
+    # print("LM test statistic:", white_test[2])
+    # print("LM test p-value:", white_test[3])
+    # # Heteroscedasticity test (Breusch-Pagan test)
+    # # _, pval, _, f_pval = sm.stats.diagnostic.het_breuschpagan(est.resid, est.model.exog)
+    # # print(est.model.exog.shape)
+    # # if exog_1.size == 0:
+    # #     exog_1 = est.model.exog
+    # # else:
+    # #     exog_1 = np.concatenate((exog_1, est.model.exog), axis=0)
+    # # print(pval, f_pval)
+    # # print("-" * 50)
+    # #
+    # # # print the results of the test
+    # # if pval > 0.05:
+    # #     print("For the Breusch-Pagan's Test")
+    # #     print("The p-value was {:.4}".format(pval))
+    # #     print(
+    # #         "We fail to reject the null hypthoesis, so there is no heterosecdasticity."
+    # #     )
+    # #
+    # # else:
+    # #     print("For the Breusch-Pagan's Test")
+    # #     print("The p-value was {:.4}".format(pval))
+    # #     print("We reject the null hypthoesis, so there is heterosecdasticity.")
+    # #
+    # # # Get fitted values and residuals
+    # # fitted_values = est.fittedvalues
+    # # residuals = est.resid
+    # #
+    # # # # Create plot
+    # # # plt.figure(figsize=(8, 6))
+    # # # plt.scatter(fitted_values, residuals, alpha=0.8)
+    # # # plt.xlabel("Fitted values")
+    # # # plt.ylabel("Residuals")
+    # # # if values_i == "RETURN_ON_ASSET":
+    # # #     plt.title("Residuals vs Fitted Values of Return on Asset")
+    # # # else:
+    # # #     plt.title("Residuals vs Fitted Values of Return on Common Equity")
+    # # # plt.axhline(y=0, color="k", linestyle="--")  # Add horizontal line at y=0
+    # # # # Set limits for x-axis and y-axis
+    # # # plt.ylim(bottom=-30, top=30)  # Example limits for the y-axis
+    # # # plt.show()
+    # # # # residuals_1 = residuals_1.append(residuals, ignore_index=True)
+    # # #
+    # # # # Assuming 'model' is your fitted regression model
+    # # # bg_test_stat, bg_p_value, _, _ = acorr_breusch_godfrey(est)
+    # # # print("Breusch_godfrey p-value: ", bg_p_value)
+    # # # # Check for autocorrelation
+    # # # if bg_p_value < 0.05:
+    # # #     print("Significant autocorrelation detected.")
+    # # # else:
+    # # #     print("No significant autocorrelation detected.")
+    # # #
+    # # # plt.rcParams["figure.figsize"] = (18, 10)
+    # # # titla_value = "Distribution of Error Term"
+    # # # plt.hist(
+    # # #     residuals, bins="auto", density=True, alpha=0.7, color="blue", edgecolor="black"
+    # # # )
+    # # # # Fit a normal distribution to the data
+    # # # mu, std = norm.fit(residuals)
+    # # #
+    # # # # Plot the PDF of the fitted distribution
+    # # # xmin, xmax = plt.xlim()
+    # # # x = np.linspace(xmin, xmax, 100)
+    # # # p = np.exp(-((x - mu) ** 2) / (2 * std**2)) / (std * np.sqrt(2 * np.pi))
+    # # # plt.plot(
+    # # #     x,
+    # # #     p,
+    # # #     "k",
+    # # #     linewidth=2,
+    # # #     label="Fit results: $\mu$ = %.2f, $\sigma$ = %.2f" % (mu, std),
+    # # # )
+    # # # plt.title(titla_value)
+    # # # plt.xlabel("Residuals")
+    # # # plt.ylabel("Frequency")
+    # # # plt.grid(True)
+    # # # plt.show()
+    # # # # plt.rcParams["figure.figsize"] = (19, 10)
+    # # # # plt.rcParams["figure.figsize"] = (18, 10)
+    # # # # titla_value = "Distribution of Error Term"
+    # # # # plt.hist(
+    # # # #     residuals, bins="auto", density=True, alpha=0.7, color="blue", edgecolor="black"
+    # # # # )
+    # # # # # Fit a normal distribution to the data
+    # # # # mu, std = norm.fit(residuals_1)
+    # # # #
+    # # # # # Plot the PDF of the fitted distribution
+    # # # # xmin, xmax = plt.xlim()
+    # # # # x = np.linspace(xmin, xmax, 100)
+    # # # # p = np.exp(-((x - mu) ** 2) / (2 * std**2)) / (std * np.sqrt(2 * np.pi))
+    # # # # plt.plot(
+    # # # #     x,
+    # # # #     p,
+    # # # #     "k",
+    # # # #     linewidth=2,
+    # # # #     label="Fit results: $\mu$ = %.2f, $\sigma$ = %.2f" % (mu, std),
+    # # # # )
+    # # # # plt.title(titla_value)
+    # # # # plt.xlabel("Residuals")
+    # # # # plt.ylabel("Frequency")
+    # # # # plt.grid(True)
+    # # # # plt.show()

@@ -15,13 +15,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
 
-file_path = (
-    "/Users/gnbhavithran/Python_github/savitha/Savitha_offl/from_starting_to_ending/"
-)
+file_path = "/Users/gnbhavithran/Python_github/savitha/Savitha_offl/from_starting_to_ending/FOr_service_and_energy/energy/"
 econ_df_1 = pd.read_csv(
-    os.path.join(
-        file_path, "FOr_service_and_energy/energy/dependent_and_control_filled.csv"
-    ),
+    os.path.join(file_path, "dependent_and_control_filled.csv"),
     index_col=0,
 )
 
@@ -80,7 +76,7 @@ series_after.to_csv(os.path.join(file_path, "series_after.csv"))
 desc_df = econ_df.describe()
 desc_df = pd.DataFrame(desc_df)
 
-desc_df.to_csv(os.path.join(file_path, "VIF.csv"))
+desc_df.to_csv(os.path.join(file_path, "describe.csv"))
 # add the standard deviation metric
 desc_df.loc["+3_std"] = desc_df.loc["mean"] + (desc_df.loc["std"] * 3)
 desc_df.loc["-3_std"] = desc_df.loc["mean"] - (desc_df.loc["std"] * 3)
