@@ -112,8 +112,8 @@ for values_i in dependent_variables:
     # Perform the Arellano-Bond test
 
     # Perform the Pesaran CD test
-    pesaran_cd_test = cd(cd.Pesaran, model, w, test_type="cd")
-    print(pesaran_cd_test.summary)
+    # pesaran_cd_test = cd(cd.Pesaran, model, w, test_type="cd")
+    # print(pesaran_cd_test.summary)
     # # # plt.figure(figsize=(8, 6))
     # # # plt.scatter(fitted_values, residuals, alpha=0.8)
     # # # plt.xlabel("Fitted values")
