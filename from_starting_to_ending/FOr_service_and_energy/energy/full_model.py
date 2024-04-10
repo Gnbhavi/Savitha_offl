@@ -18,7 +18,13 @@ from statsmodels.stats.diagnostic import acorr_breusch_godfrey
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
-from statsmodels.stats.diagnostic import het_breuschpagan, het_white, het_goldfeldquandt
+from statsmodels.stats.diagnostic import (
+    het_breuschpagan,
+    het_white,
+    het_goldfeldquandt,
+    het_arch,
+    acorr_ljungbox,
+)
 
 file_path = "/Users/gnbhavithran/Python_github/savitha/Savitha_offl/from_starting_to_ending/FOr_service_and_energy/energy/"
 
@@ -109,8 +115,26 @@ for values_i in dependent_variables:
         print("For the Goldfeld-Quandt Test")
         print("The p-value was {:.4}".format(gq_p_value))
         print("We reject the null hypthoesis, so there is heterosecdasticity.")
-    # Perform the Arellano-Bond test
 
+    arch_test = het_arch(model.resid)
+    print("ArCH test")
+    print(arch_test)
+    # Get the residuals from the fitted model
+    resid = model.resid
+
+    # cd_test = cdtest(model, group_effect=True)
+    # Perform the Arellano-Bond test
+    # Get the residuals from the fitted model
+    resid = model.resid
+
+    # Perform the Ljung-Box test for autocorrelation
+    lb_test = acorr_ljungbox(
+        resid, lags=10
+    )  # Specify the number of lags (n_lags) to test
+
+    # Print the test results
+    print("Ljung-Box Test Results:")
+    print(lb_test)
     # Perform the Pesaran CD test
     # pesaran_cd_test = cd(cd.Pesaran, model, w, test_type="cd")
     # print(pesaran_cd_test.summary)
@@ -128,14 +152,14 @@ for values_i in dependent_variables:
     # # # plt.show()
     # # # # residuals_1 = residuals_1.append(residuals, ignore_index=True)
     # # #
-    # # # # Assuming 'model' is your fitted regression model
-    # # # bg_test_stat, bg_p_value, _, _ = acorr_breusch_godfrey(est)
-    # # # print("Breusch_godfrey p-value: ", bg_p_value)
-    # # # # Check for autocorrelation
-    # # # if bg_p_value < 0.05:
-    # # #     print("Significant autocorrelation detected.")
-    # # # else:
-    # # #     print("No significant autocorrelation detected.")
+    # Assuming 'model' is your fitted regression model
+    bg_test_stat, bg_p_value, _, _ = acorr_breusch_godfrey(model)
+    print("Breusch_godfrey p-value: ", bg_p_value)
+    # Check for autocorrelation
+    if bg_p_value < 0.05:
+        print("Significant autocorrelation detected.")
+    else:
+        print("No significant autocorrelation detected.")
     # # #
     # # # plt.rcParams["figure.figsize"] = (18, 10)
     # # # titla_value = "Distribution of Error Term"
