@@ -1,0 +1,32 @@
+                            GLS Regression Results                            
+==============================================================================
+Dep. Variable:        RETURN_ON_ASSET   R-squared:                       0.213
+Model:                            GLS   Adj. R-squared:                  0.198
+Method:                 Least Squares   F-statistic:                     32.23
+Date:                Sat, 24 Feb 2024   Prob (F-statistic):           3.75e-30
+Time:                        12:38:15   Log-Likelihood:                -1192.8
+No. Observations:                 320   AIC:                             2400.
+Df Residuals:                     313   BIC:                             2426.
+Df Model:                           6                                         
+Covariance Type:                  HC3                                         
+========================================================================================
+                           coef    std err          z      P>|z|      [0.025      0.975]
+----------------------------------------------------------------------------------------
+const                   16.5885      7.538      2.201      0.028       1.814      31.363
+ESG_DISCLOSURE_SCORE    -0.1290      0.059     -2.187      0.029      -0.245      -0.013
+BS_TOT_ASSET           -5.7e-07   4.18e-07     -1.362      0.173   -1.39e-06     2.5e-07
+FNCL_LVRG               -3.3837      0.597     -5.668      0.000      -4.554      -2.214
+PX_TO_BOOK_RATIO         0.1665      0.079      2.114      0.035       0.012       0.321
+Firm size                0.5165      0.960      0.538      0.590      -1.364       2.397
+Liquidity               -0.3481      1.122     -0.310      0.756      -2.547       1.851
+==============================================================================
+Omnibus:                      415.232   Durbin-Watson:                   1.072
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):            70874.116
+Skew:                          -5.722   Prob(JB):                         0.00
+Kurtosis:                      75.004   Cond. No.                     1.77e+07
+==============================================================================
+
+Notes:
+[1] Standard Errors are heteroscedasticity robust (HC3)
+[2] The condition number is large, 1.77e+07. This might indicate that there are
+strong multicollinearity or other numerical problems.
